@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Courier New', monospace;
+    background: linear-gradient(to bottom, #001122, #003366);
+    color: #00ff00;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-container {
+    background: #000;
+    border: 2px solid #00ff00;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 20px #00ff00;
+}
+
+.game-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.game-header h1 {
+    font-size: 28px;
+    color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    margin-bottom: 10px;
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.game-info div {
+    background: rgba(0, 255, 0, 0.1);
+    padding: 5px 10px;
+    border: 1px solid #00ff00;
+    border-radius: 5px;
+}
+
+#gameCanvas {
+    display: block;
+    border: 2px solid #333;
+    background: #000;
+    cursor: crosshair;
+}
+
+.game-controls {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.instructions {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #cccccc;
+}
+
+.instructions p {
+    margin: 5px 0;
+}
+
+button {
+    background: linear-gradient(to bottom, #00aa00, #006600);
+    color: white;
+    border: 2px solid #00ff00;
+    padding: 10px 20px;
+    margin: 0 5px;
+    font-size: 14px;
+    font-family: 'Courier New', monospace;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+button:hover {
+    background: linear-gradient(to bottom, #00ff00, #00aa00);
+    box-shadow: 0 0 10px #00ff00;
+    transform: translateY(-2px);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.game-over {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.9);
+    border: 3px solid #ff0000;
+    border-radius: 15px;
+    padding: 30px;
+    text-align: center;
+    z-index: 1000;
+    box-shadow: 0 0 30px #ff0000;
+}
+
+.game-over h2 {
+    color: #ff0000;
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-shadow: 0 0 15px #ff0000;
+}
+
+.game-over p {
+    color: #ffff00;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+/* 游戏内效果 */
+@keyframes explosion {
+    0% { 
+        transform: scale(0);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+.explosion {
+    animation: explosion 0.5s ease-out;
+}
+
+/* 响应式设计 */
+@media (max-width: 900px) {
+    .game-container {
+        padding: 10px;
+    }
+    
+    #gameCanvas {
+        width: 100%;
+        max-width: 800px;
+        height: auto;
+    }
+    
+    .game-info {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .game-header h1 {
+        font-size: 24px;
+    }
+} 
