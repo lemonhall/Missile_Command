@@ -28,12 +28,7 @@
 5. **游戏结束**：所有城市被摧毁时游戏结束
 6. **关卡递进**：清空所有敌方导弹后进入下一关
 
-## 🔧 技术实现
-
-- **HTML5 Canvas**：游戏渲染引擎
-- **JavaScript ES6+**：游戏逻辑和类结构
-- **CSS3**：界面样式和动画效果
-- **原生Web技术**：无需额外依赖，直接在浏览器中运行
+## 🔧 技术实现- **HTML5 Canvas**：游戏渲染引擎- **JavaScript ES6+**：游戏逻辑和类结构- **CSS3**：界面样式和动画效果- **模块化架构**：代码拆分成多个逻辑清晰的文件- **原生Web技术**：无需额外依赖，直接在浏览器中运行### 🗂️ 项目结构```Missile_Command/├── index.html          # 主页面├── style.css           # 样式文件├── README.md           # 说明文档└── js/                 # JavaScript模块    ├── GameConfig.js   # 游戏配置和常量    ├── GameObject.js   # 游戏对象类定义    ├── GameRenderer.js # 渲染功能模块    ├── MissileCommand.js # 主要游戏逻辑    └── main.js         # 游戏初始化```
 
 ## 🚀 如何运行
 
@@ -62,6 +57,4 @@
 
 游戏支持不同屏幕尺寸，在移动设备上也可以正常游玩。
 
----
-
-重温经典，保卫地球！🌍💥🚀 
+## 🗂️ 项目结构```Missile_Command/├── index.html          # 主页面├── style.css           # 样式文件  ├── README.md           # 说明文档└── js/                 # JavaScript模块    ├── GameConfig.js   # 游戏配置和常量    ├── GameObject.js   # 游戏对象类定义    ├── GameRenderer.js # 渲染功能模块    ├── MissileCommand.js # 主要游戏逻辑    └── main.js         # 游戏初始化```### 📋 模块说明- **GameConfig.js**: 包含所有游戏参数、颜色、字体等配置- **GameObject.js**: 定义导弹、爆炸、粒子、城市等游戏对象类- **GameRenderer.js**: 负责所有绘制功能，包括背景、对象、UI等- **MissileCommand.js**: 核心游戏逻辑，包括更新、碰撞检测、关卡管理- **main.js**: 游戏初始化入口---重温经典，保卫地球！🌍💥🚀 
