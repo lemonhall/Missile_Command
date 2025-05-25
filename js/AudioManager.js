@@ -6,9 +6,15 @@ class AudioManager {
     constructor() {
         this.audioContext = null;
         this.masterGain = null;
+        this.bgmGain = null;
         this.initialized = false;
         this.soundEffects = new Map();
         this.enabled = true;
+        this.bgmEnabled = true;
+        
+        // 背景音乐相关
+        this.currentBGM = null;
+        this.bgmVolume = 0.15; // 较低的背景音乐音量
         
         // 初始化音效库
         this.initSoundEffects();
@@ -42,8 +48,13 @@ class AudioManager {
         try {
             this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
             this.masterGain = this.audioContext.createGain();
+            this.bgmGain = this.audioContext.createGain();
+            
             this.masterGain.connect(this.audioContext.destination);
-            this.masterGain.gain.value = 0.3; // 主音量
+            this.bgmGain.connect(this.audioContext.destination);
+            
+            this.masterGain.gain.value = 0.3; // 音效音量
+            this.bgmGain.gain.value = this.bgmVolume; // BGM音量
 
             if (this.audioContext.state === 'suspended') {
                 await this.audioContext.resume();
@@ -323,6 +334,128 @@ class AudioManager {
      */
     getAllSoundNames() {
         return Array.from(this.soundEffects.keys());
+    }
+
+    /**
+     * 播放背景音乐
+     */
+    async playBGM(musicPath) {
+        console.log('尝试播放BGM:', musicPath, '初始化状态:', this.initialized, 'BGM启用:', this.bgmEnabled);
+        
+        if (!this.bgmEnabled) {
+            console.log('BGM被禁用，跳过播放');
+            return;
+        }
+        
+        if (!this.initialized) {
+            console.log('音频上下文未初始化，尝试初始化...');
+            await this.initAudioContext();
+            if (!this.initialized) {
+                console.error('音频上下文初始化失败');
+                return;
+            }
+        }
+
+        try {
+            // 停止当前BGM
+            this.stopBGM();
+            console.log('开始加载音频文件...');
+
+            // 创建音频元素
+            const audio = new Audio(musicPath);
+            audio.loop = true;
+            audio.volume = 1; // 使用正常音量，通过Web Audio API控制
+
+            // 等待音频加载
+            await new Promise((resolve, reject) => {
+                const timeout = setTimeout(() => {
+                    reject(new Error('音频加载超时'));
+                }, 10000); // 10秒超时
+
+                audio.addEventListener('canplaythrough', () => {
+                    clearTimeout(timeout);
+                    console.log('音频文件加载完成');
+                    resolve();
+                });
+                
+                audio.addEventListener('error', (e) => {
+                    clearTimeout(timeout);
+                    console.error('音频加载错误:', e);
+                    reject(e);
+                });
+                
+                audio.load();
+            });
+
+            // 创建Web Audio API节点
+            const source = this.audioContext.createMediaElementSource(audio);
+            source.connect(this.bgmGain);
+
+            this.currentBGM = {
+                audio: audio,
+                source: source
+            };
+
+            // 开始播放
+            console.log('开始播放音频...');
+            await audio.play();
+            console.log('背景音乐开始播放成功:', musicPath);
+
+        } catch (error) {
+            console.error('播放背景音乐失败:', error);
+            console.error('错误详情:', error.message);
+        }
+    }
+
+    /**
+     * 停止背景音乐
+     */
+    stopBGM() {
+        if (this.currentBGM) {
+            this.currentBGM.audio.pause();
+            this.currentBGM.audio.currentTime = 0;
+            this.currentBGM = null;
+        }
+    }
+
+    /**
+     * 暂停背景音乐
+     */
+    pauseBGM() {
+        if (this.currentBGM) {
+            this.currentBGM.audio.pause();
+        }
+    }
+
+    /**
+     * 恢复背景音乐
+     */
+    resumeBGM() {
+        if (this.currentBGM && this.bgmEnabled) {
+            this.currentBGM.audio.play().catch(console.error);
+        }
+    }
+
+    /**
+     * 设置背景音乐开关
+     */
+    setBGMEnabled(enabled) {
+        this.bgmEnabled = enabled;
+        if (!enabled) {
+            this.pauseBGM();
+        } else {
+            this.resumeBGM();
+        }
+    }
+
+    /**
+     * 设置背景音乐音量
+     */
+    setBGMVolume(volume) {
+        this.bgmVolume = Math.max(0, Math.min(1, volume));
+        if (this.bgmGain) {
+            this.bgmGain.gain.value = this.bgmVolume;
+        }
     }
 }
 

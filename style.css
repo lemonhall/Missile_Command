@@ -97,6 +97,20 @@ button {
     transform: translateY(-2px);
 }
 
+#bgmBtn {
+    background: linear-gradient(to bottom, #6600aa, #440066);
+    border-color: #aa00ff;
+    padding: 8px 12px;
+    font-size: 18px;
+    min-width: 50px;
+}
+
+#bgmBtn:hover {
+    background: linear-gradient(to bottom, #aa00ff, #6600aa);
+    box-shadow: 0 0 10px #aa00ff;
+    transform: translateY(-2px);
+}
+
 button:hover {
     background: linear-gradient(to bottom, #00ff00, #00aa00);
     box-shadow: 0 0 10px #00ff00;

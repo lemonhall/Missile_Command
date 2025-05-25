@@ -90,10 +90,18 @@ class MissileCommand {
         document.getElementById('playAgainBtn').addEventListener('click', () => this.restart());
     }
     
-    start() {
+    async start() {
         this.gameState = 'playing';
         this.gameLoop();
         this.spawnEnemyMissiles();
+        
+        // 确保音频系统初始化后再播放背景音乐
+        if (window.AudioManager) {
+            await window.AudioManager.initAudioContext();
+            setTimeout(() => {
+                window.AudioManager.playBGM('music/Untitled.mp3');
+            }, 100); // 稍微延迟确保初始化完成
+        }
     }
     
     togglePause() {
@@ -104,10 +112,20 @@ class MissileCommand {
                 clearTimeout(this.spawnTimer);
                 this.spawnTimer = null;
             }
+            
+            // 暂停背景音乐
+            if (window.AudioManager) {
+                window.AudioManager.pauseBGM();
+            }
         } else if (this.gameState === 'paused') {
             this.gameState = 'playing';
             this.gameLoop();
             this.spawnEnemyMissiles();
+            
+            // 恢复背景音乐
+            if (window.AudioManager) {
+                window.AudioManager.resumeBGM();
+            }
         }
     }
     
@@ -124,6 +142,11 @@ class MissileCommand {
         if (this.spawnTimer) {
             clearTimeout(this.spawnTimer);
             this.spawnTimer = null;
+        }
+        
+        // 停止背景音乐
+        if (window.AudioManager) {
+            window.AudioManager.stopBGM();
         }
         
         this.init();
@@ -331,6 +354,11 @@ class MissileCommand {
         if (this.spawnTimer) {
             clearTimeout(this.spawnTimer);
             this.spawnTimer = null;
+        }
+        
+        // 停止背景音乐
+        if (window.AudioManager) {
+            window.AudioManager.stopBGM();
         }
         
         // 播放游戏结束音效
