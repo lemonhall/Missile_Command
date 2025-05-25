@@ -281,9 +281,13 @@ class MissileCommand {
             this.particles.push(new Particle(x, y, type));
         }
         
-        // 播放爆炸音效
+        // 根据爆炸类型播放不同的音效
         if (window.AudioManager) {
-            window.AudioManager.playSound('explosion');
+            if (type === 'chain') {
+                window.AudioManager.playSound('chainExplosion');
+            } else {
+                window.AudioManager.playSound('explosion');
+            }
         }
     }
     

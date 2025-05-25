@@ -87,33 +87,66 @@ class AudioManager {
             description: '爆炸音效',
             emoji: '💥'
         }, (audioCtx) => {
-            const bufferSize = audioCtx.sampleRate * 0.3;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
+            // 简单但有效的爆炸声 - 低频突然爆发然后快速衰减
             
-            // 生成白噪声
-            for (let i = 0; i < bufferSize; i++) {
-                data[i] = Math.random() * 2 - 1;
+            // 主要爆炸声 - 使用低频振荡器
+            const mainOsc = audioCtx.createOscillator();
+            const mainGain = audioCtx.createGain();
+            const mainFilter = audioCtx.createBiquadFilter();
+            
+            mainOsc.connect(mainFilter);
+            mainFilter.connect(mainGain);
+            mainGain.connect(this.masterGain);
+            
+            // 设置为低频方波，模拟爆炸的"boom"
+            mainOsc.type = 'square';
+            mainOsc.frequency.setValueAtTime(60, audioCtx.currentTime);
+            mainOsc.frequency.exponentialRampToValueAtTime(20, audioCtx.currentTime + 0.2);
+            
+            // 低通滤波器让声音更沉闷
+            mainFilter.type = 'lowpass';
+            mainFilter.frequency.setValueAtTime(200, audioCtx.currentTime);
+            mainFilter.Q.value = 1;
+            
+            // 爆炸的音量包络 - 突然开始，快速衰减
+            mainGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            mainGain.gain.linearRampToValueAtTime(0.8, audioCtx.currentTime + 0.01); // 10ms内达到最大音量
+            mainGain.gain.exponentialRampToValueAtTime(0.1, audioCtx.currentTime + 0.1);
+            mainGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            
+            // 添加一些噪声来增加质感
+            const noiseBufferSize = audioCtx.sampleRate * 0.2;
+            const noiseBuffer = audioCtx.createBuffer(1, noiseBufferSize, audioCtx.sampleRate);
+            const noiseData = noiseBuffer.getChannelData(0);
+            
+            for (let i = 0; i < noiseBufferSize; i++) {
+                // 生成衰减的噪声
+                const decay = Math.exp(-i / (noiseBufferSize * 0.1));
+                noiseData[i] = (Math.random() * 2 - 1) * decay * 0.3;
             }
             
-            const source = audioCtx.createBufferSource();
-            const gainNode = audioCtx.createGain();
-            const filter = audioCtx.createBiquadFilter();
+            const noiseSource = audioCtx.createBufferSource();
+            const noiseGain = audioCtx.createGain();
+            const noiseFilter = audioCtx.createBiquadFilter();
             
-            source.buffer = buffer;
-            source.connect(filter);
-            filter.connect(gainNode);
-            gainNode.connect(this.masterGain);
+            noiseSource.buffer = noiseBuffer;
+            noiseSource.connect(noiseFilter);
+            noiseFilter.connect(noiseGain);
+            noiseGain.connect(this.masterGain);
             
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
-            filter.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+            // 噪声滤波 - 只保留低频部分
+            noiseFilter.type = 'lowpass';
+            noiseFilter.frequency.value = 500;
             
-            gainNode.gain.setValueAtTime(0.8, audioCtx.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+            noiseGain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+            noiseGain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.2);
             
-            source.start(audioCtx.currentTime);
-            source.stop(audioCtx.currentTime + 0.3);
+            // 启动音效
+            mainOsc.start(audioCtx.currentTime);
+            mainOsc.stop(audioCtx.currentTime + 0.3);
+            
+            noiseSource.start(audioCtx.currentTime);
+            noiseSource.stop(audioCtx.currentTime + 0.2);
         });
 
         // 城市被摧毁音效
@@ -203,6 +236,38 @@ class AudioManager {
             
             oscillator.start(audioCtx.currentTime);
             oscillator.stop(audioCtx.currentTime + 0.8);
+        });
+
+        // 链式爆炸音效（更短促的爆炸声）
+        this.registerSound('chainExplosion', {
+            description: '链式爆炸音效',
+            emoji: '⚡'
+        }, (audioCtx) => {
+            // 简单的"pop"声效果
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            const filter = audioCtx.createBiquadFilter();
+            
+            osc.connect(filter);
+            filter.connect(gain);
+            gain.connect(this.masterGain);
+            
+            // 中频方波，快速衰减
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(120, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + 0.08);
+            
+            // 低通滤波
+            filter.type = 'lowpass';
+            filter.frequency.value = 300;
+            
+            // 快速的爆发和衰减
+            gain.gain.setValueAtTime(0, audioCtx.currentTime);
+            gain.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.005);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.08);
+            
+            osc.start(audioCtx.currentTime);
+            osc.stop(audioCtx.currentTime + 0.08);
         });
     }
 
