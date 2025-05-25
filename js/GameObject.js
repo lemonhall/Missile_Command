@@ -4,6 +4,8 @@ class Missile {
     constructor(x, y, targetX, targetY, speed) {
         this.x = x;
         this.y = y;
+        this.startX = x;  // 添加起始位置
+        this.startY = y;  // 添加起始位置
         this.targetX = targetX;
         this.targetY = targetY;
         this.trail = [];
