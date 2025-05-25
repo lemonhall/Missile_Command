@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GameRenderer 测试</title>
+</head>
+<body>
+    <h1>GameRenderer 类测试</h1>
+    <canvas id="testCanvas" width="400" height="300" style="border: 1px solid black;"></canvas>
+    <div id="result"></div>
+    
+    <script src="js/GameConfig.js"></script>
+    <script src="js/GameObject.js"></script>
+    <script src="js/GameRenderer.js"></script>
+    <script>
+        const result = document.getElementById('result');
+        
+        try {
+            console.log('GameRenderer类定义:', typeof GameRenderer);
+            result.innerHTML += '<p>GameRenderer类定义: ' + typeof GameRenderer + '</p>';
+            
+            if (typeof GameRenderer === 'function') {
+                const canvas = document.getElementById('testCanvas');
+                const ctx = canvas.getContext('2d');
+                const renderer = new GameRenderer(canvas, ctx);
+                
+                console.log('GameRenderer实例:', renderer);
+                console.log('update方法:', typeof renderer.update);
+                
+                result.innerHTML += '<p>GameRenderer实例创建成功</p>';
+                result.innerHTML += '<p>update方法类型: ' + typeof renderer.update + '</p>';
+                
+                if (typeof renderer.update === 'function') {
+                    renderer.update(16);
+                    result.innerHTML += '<p style="color: green;">✓ update方法调用成功</p>';
+                } else {
+                    result.innerHTML += '<p style="color: red;">✗ update方法不存在</p>';
+                }
+            } else {
+                result.innerHTML += '<p style="color: red;">✗ GameRenderer类未正确定义</p>';
+            }
+        } catch (error) {
+            console.error('错误:', error);
+            result.innerHTML += '<p style="color: red;">错误: ' + error.message + '</p>';
+        }
+    </script>
+</body>
+</html> 

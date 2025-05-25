@@ -377,6 +377,9 @@ class MissileCommand {
     }
     
     render() {
+        // 更新渲染器时间
+        this.renderer.update(this.lastTime);
+        
         // 清空画布
         this.renderer.clearCanvas();
         
