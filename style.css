@@ -83,6 +83,20 @@ button {
     transition: all 0.3s;
 }
 
+#muteBtn {
+    background: linear-gradient(to bottom, #aa6600, #664400);
+    border-color: #ffaa00;
+    padding: 8px 12px;
+    font-size: 18px;
+    min-width: 50px;
+}
+
+#muteBtn:hover {
+    background: linear-gradient(to bottom, #ffaa00, #aa6600);
+    box-shadow: 0 0 10px #ffaa00;
+    transform: translateY(-2px);
+}
+
 button:hover {
     background: linear-gradient(to bottom, #00ff00, #00aa00);
     box-shadow: 0 0 10px #00ff00;

@@ -143,6 +143,11 @@ class MissileCommand {
         );
         
         this.missiles.push(missile);
+        
+        // 播放发射音效
+        if (window.AudioManager) {
+            window.AudioManager.playSound('missileLaunch');
+        }
     }
     
     spawnEnemyMissiles() {
@@ -258,6 +263,11 @@ class MissileCommand {
                 city.destroy();
                 this.citiesRemaining--;
                 this.updateUI();
+                
+                // 播放城市被摧毁音效
+                if (window.AudioManager) {
+                    window.AudioManager.playSound('cityDestroyed');
+                }
             }
         });
     }
@@ -270,12 +280,22 @@ class MissileCommand {
         for (let i = 0; i < GameConfig.PARTICLE_COUNT_PER_EXPLOSION; i++) {
             this.particles.push(new Particle(x, y, type));
         }
+        
+        // 播放爆炸音效
+        if (window.AudioManager) {
+            window.AudioManager.playSound('explosion');
+        }
     }
     
     nextLevel() {
         this.level++;
         this.score += this.citiesRemaining * GameConfig.SCORE_PER_CITY_BONUS;
         this.updateUI();
+        
+        // 播放关卡完成音效
+        if (window.AudioManager) {
+            window.AudioManager.playSound('levelComplete');
+        }
         
         // 稍微修复一些城市
         if (this.citiesRemaining < GameConfig.CITY_COUNT) {
@@ -307,6 +327,11 @@ class MissileCommand {
         if (this.spawnTimer) {
             clearTimeout(this.spawnTimer);
             this.spawnTimer = null;
+        }
+        
+        // 播放游戏结束音效
+        if (window.AudioManager) {
+            window.AudioManager.playSound('gameOver');
         }
         
         document.getElementById('finalScore').textContent = this.score;
