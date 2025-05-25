@@ -15,11 +15,20 @@ class CityRendererFactory {
         this.renderers.set(6, new LondonRenderer());
         this.renderers.set(7, new ParisRenderer());
         this.renderers.set(8, new SydneyRenderer());
+        this.renderers.set(9, new KyotoRenderer());
+        this.renderers.set(10, new NewDelhiRenderer());
+        this.renderers.set(11, new MoscowRenderer());
+        this.renderers.set(12, new MadridRenderer());
+        this.renderers.set(13, new LisbonRenderer());
+        this.renderers.set(14, new BerlinRenderer());
+        this.renderers.set(15, new CapeTownRenderer());
+        this.renderers.set(16, new WellingtonRenderer());
+        this.renderers.set(17, new SingaporeRenderer());
     }
     
     getRenderer(level) {
         // 根据关卡获取对应的城市渲染器
-        const themeIndex = ((level - 1) % 8) + 1;
+        const themeIndex = ((level - 1) % 17) + 1;
         return this.renderers.get(themeIndex) || this.getDefaultRenderer();
     }
     

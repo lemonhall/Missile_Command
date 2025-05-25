@@ -125,4 +125,38 @@ class GameLevel {
         document.getElementById('finalScore').textContent = this.game.score;
         document.getElementById('gameOverScreen').classList.remove('hidden');
     }
+    
+    // 作弊器：直接跳到下一关
+    cheatNextLevel() {
+        if (this.game.gameState !== 'playing') {
+            return;
+        }
+        
+        // 清除所有敌方导弹和爆炸
+        this.game.enemyMissiles = [];
+        this.game.explosions = [];
+        this.game.particles = [];
+        
+        // 清除当前的敌方导弹生成计时器
+        if (this.game.spawnTimer) {
+            clearTimeout(this.game.spawnTimer);
+            this.game.spawnTimer = null;
+        }
+        
+        // 重置敌方导弹计数器，模拟全部击毁
+        this.game.enemyMissilesSpawned = this.game.enemyMissilesToSpawn;
+        
+        // 标记关卡完成
+        this.game.levelCompleting = true;
+        
+        // 播放关卡完成音效
+        if (window.AudioManager) {
+            window.AudioManager.playSound('levelComplete');
+        }
+        
+        // 延迟进入下一关
+        setTimeout(() => {
+            this.nextLevel();
+        }, 1000);
+    }
 } 

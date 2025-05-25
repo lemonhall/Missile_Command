@@ -42,6 +42,11 @@ class MissileCommand extends GameCore {
         this.levelManager.gameOver();
     }
     
+    // 作弊功能
+    cheatNextLevel() {
+        this.levelManager.cheatNextLevel();
+    }
+    
     update(deltaTime) {
         this.logic.update(deltaTime);
     }

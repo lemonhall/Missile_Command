@@ -32,6 +32,7 @@ class GameEvents {
         document.getElementById('startBtn').addEventListener('click', () => this.game.start());
         document.getElementById('pauseBtn').addEventListener('click', () => this.game.togglePause());
         document.getElementById('restartBtn').addEventListener('click', () => this.game.restart());
+        document.getElementById('nextLevelBtn').addEventListener('click', () => this.game.cheatNextLevel());
         document.getElementById('playAgainBtn').addEventListener('click', () => this.game.restart());
     }
 } 

@@ -66,6 +66,8 @@ class GameCore {
         document.getElementById('score').textContent = this.score;
         document.getElementById('level').textContent = this.level;
         document.getElementById('cities').textContent = this.citiesRemaining;
+        
+        // 作弊按钮始终显示（方便测试城市风格）
     }
     
     render() {

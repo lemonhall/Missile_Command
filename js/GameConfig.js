@@ -168,6 +168,105 @@ const GameConfig = {
             cityLights: '#fd79a8',
             starColor: '#ffeaa7',
             atmosphere: 'oceanic'
+        },
+        9: { // 京都 - 古都风韵
+            name: '京都',
+            nameEn: 'Kyoto',
+            background: '#2d3436',
+            skyGradient: ['#636e72', '#2d3436'],
+            groundColor: '#8b4513',
+            cityColor: '#e17055',
+            cityLights: '#fdcb6e',
+            starColor: '#ffeaa7',
+            atmosphere: 'traditional'
+        },
+        10: { // 新德里 - 印度门
+            name: '新德里',
+            nameEn: 'New Delhi',
+            background: '#e17055',
+            skyGradient: ['#fd79a8', '#e84393'],
+            groundColor: '#d63031',
+            cityColor: '#fdcb6e',
+            cityLights: '#fd79a8',
+            starColor: '#ffeaa7',
+            atmosphere: 'exotic'
+        },
+        11: { // 莫斯科 - 红场风情
+            name: '莫斯科',
+            nameEn: 'Moscow',
+            background: '#2d3436',
+            skyGradient: ['#636e72', '#2d3436'],
+            groundColor: '#ffffff',
+            cityColor: '#d63031',
+            cityLights: '#ffd700',
+            starColor: '#ffffff',
+            atmosphere: 'imperial'
+        },
+        12: { // 马德里 - 西班牙风情
+            name: '马德里',
+            nameEn: 'Madrid',
+            background: '#e17055',
+            skyGradient: ['#fd79a8', '#fdcb6e'],
+            groundColor: '#e17055',
+            cityColor: '#fdcb6e',
+            cityLights: '#fd79a8',
+            starColor: '#ffeaa7',
+            atmosphere: 'passionate'
+        },
+        13: { // 里斯本 - 航海之都
+            name: '里斯本',
+            nameEn: 'Lisbon',
+            background: '#0984e3',
+            skyGradient: ['#74b9ff', '#0984e3'],
+            groundColor: '#fdcb6e',
+            cityColor: '#74b9ff',
+            cityLights: '#fd79a8',
+            starColor: '#ffffff',
+            atmosphere: 'maritime'
+        },
+        14: { // 柏林 - 现代之都
+            name: '柏林',
+            nameEn: 'Berlin',
+            background: '#2d3436',
+            skyGradient: ['#636e72', '#b2bec3'],
+            groundColor: '#636e72',
+            cityColor: '#a29bfe',
+            cityLights: '#fd79a8',
+            starColor: '#ddd',
+            atmosphere: 'modern'
+        },
+        15: { // 开普敦 - 非洲之星
+            name: '开普敦',
+            nameEn: 'Cape Town',
+            background: '#e17055',
+            skyGradient: ['#fd79a8', '#fdcb6e'],
+            groundColor: '#8b4513',
+            cityColor: '#00b894',
+            cityLights: '#fdcb6e',
+            starColor: '#ffeaa7',
+            atmosphere: 'african'
+        },
+        16: { // 惠灵顿 - 新西兰之心
+            name: '惠灵顿',
+            nameEn: 'Wellington',
+            background: '#00b894',
+            skyGradient: ['#55a3ff', '#00b894'],
+            groundColor: '#00cec9',
+            cityColor: '#74b9ff',
+            cityLights: '#fdcb6e',
+            starColor: '#ffffff',
+            atmosphere: 'natural'
+        },
+        17: { // 新加坡 - 狮城明珠
+            name: '新加坡',
+            nameEn: 'Singapore',
+            background: '#0984e3',
+            skyGradient: ['#74b9ff', '#00cec9'],
+            groundColor: '#2d3748',
+            cityColor: '#00cec9',
+            cityLights: '#fd79a8',
+            starColor: '#81ecec',
+            atmosphere: 'tropical'
         }
     }
 }; 

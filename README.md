@@ -5,7 +5,7 @@
 ## 🎮 游戏特色
 
 - **经典玩法**：忠实还原1980年雅达利原版游戏机制
-- **世界城市主题**：8个世界知名城市，每个城市都有独特的建筑特色和视觉效果
+- **世界城市主题**：17个世界知名城市，每个城市都有独特的建筑特色和视觉效果
 - **现代视觉**：使用HTML5 Canvas技术，带有粒子效果和爆炸动画
 - **完整音效系统**：基于Web Audio API的经典游戏音效
 - **背景音乐**：沉浸式的复古电子音乐BGM
@@ -91,7 +91,7 @@ python -m http.server 8000
 
 ## 🏙️ 世界城市主题
 
-游戏包含8个精心设计的世界城市主题，每个城市都有独特的建筑特色和视觉效果：
+游戏包含17个精心设计的世界城市主题，每个城市都有独特的建筑特色和视觉效果：
 
 | 城市 | 特色建筑 | 视觉特点 |
 |------|----------|----------|
@@ -103,10 +103,19 @@ python -m http.server 8000
 | 🕰️ 伦敦 | 大本钟、维多利亚式窗户 | 雾都风情，动态时钟指针 |
 | 🗼 巴黎 | 埃菲尔铁塔、法式阳台 | 浪漫之都，钢架结构和浪漫灯光 |
 | 🎭 悉尼 | 悉尼歌剧院、海港灯塔 | 海港明珠，帆状屋顶和港口灯光 |
+| 🏯 京都 | 清水寺、传统日式纸窗 | 古都风韵，多层屋顶和寺庙灯笼 |
+| 🕌 新德里 | 印度门、莫卧儿圆顶 | 印度风情，拱形建筑和永恒之火 |
+| ⛪ 莫斯科 | 圣瓦西里大教堂、洋葱头圆顶 | 红场风情，多彩圆顶和雪花效果 |
+| 👑 马德里 | 皇宫、红瓦屋顶 | 西班牙风情，弗拉门戈色彩光效 |
+| ⚓ 里斯本 | 贝伦塔、葡式瓷砖 | 航海之都，蓝白瓷砖和船舱窗户 |
+| 🏗️ 柏林 | 勃兰登堡门、现代德式建筑 | 现代之都，胜利女神四马战车和德国色彩 |
+| 🦁 开普敦 | 桌山、非洲传统图案 | 非洲之星，平顶桌山和传统几何装饰 |
+| 🥝 惠灵顿 | 议会"蜂巢"、毛利螺旋图案 | 新西兰之心，独特建筑和自然元素 |
+| 🏙️ 新加坡 | 滨海湾金沙、现代摩天楼 | 狮城明珠，无边泳池和热带装饰 |
 
 ### 城市主题切换
-- 每关显示一个城市主题，共8关为一个循环
-- 关卡9重新从北京开始，关卡17再次从北京开始，如此循环
+- 每关显示一个城市主题，共17关为一个循环
+- 关卡18重新从北京开始，关卡35再次从北京开始，如此循环
 - 每个城市都有独特的色彩搭配、建筑风格和动画效果
 
 ## 🎮 游戏策略
@@ -172,7 +181,7 @@ Missile_Command/
 ### 📋 模块说明
 
 - **AudioManager.js**: 完整的音效系统，包括音效生成和背景音乐播放
-- **GameConfig.js**: 包含所有游戏参数、颜色、字体等配置，以及8个城市主题的完整配置
+- **GameConfig.js**: 包含所有游戏参数、颜色、字体等配置，以及17个城市主题的完整配置
 - **GameObject.js**: 定义导弹、爆炸、粒子、城市等游戏对象类
 - **渲染模块**: 模块化的渲染系统，提供高质量的视觉效果
   - `BackgroundRenderer.js`: 多层背景主题和星空效果
@@ -187,6 +196,15 @@ Missile_Command/
     - `LondonRenderer.js`: 伦敦渲染器（大本钟、维多利亚式窗户）
     - `ParisRenderer.js`: 巴黎渲染器（埃菲尔铁塔、法式阳台）
     - `SydneyRenderer.js`: 悉尼渲染器（歌剧院、海港灯塔）
+    - `KyotoRenderer.js`: 京都渲染器（清水寺、传统纸窗）
+    - `NewDelhiRenderer.js`: 新德里渲染器（印度门、莫卧儿圆顶）
+    - `MoscowRenderer.js`: 莫斯科渲染器（圣瓦西里大教堂、洋葱头圆顶）
+    - `MadridRenderer.js`: 马德里渲染器（皇宫、弗拉门戈色彩）
+    - `LisbonRenderer.js`: 里斯本渲染器（贝伦塔、葡式瓷砖）
+    - `BerlinRenderer.js`: 柏林渲染器（勃兰登堡门、现代德式建筑）
+    - `CapeTownRenderer.js`: 开普敦渲染器（桌山、非洲传统图案）
+    - `WellingtonRenderer.js`: 惠灵顿渲染器（议会蜂巢、毛利文化）
+    - `SingaporeRenderer.js`: 新加坡渲染器（滨海湾金沙、热带装饰）
     - `CityRendererFactory.js`: 城市渲染器工厂，管理渲染器实例
   - `MissileRenderer.js`: 发光轨迹和火箭造型导弹
   - `EffectRenderer.js`: 层次丰富的爆炸和粒子特效
@@ -232,7 +250,7 @@ Missile_Command/
 
 1. **在 `GameConfig.js` 中添加城市主题配置**:
 ```javascript
-9: { // 新城市
+18: { // 新城市
     name: '城市名',
     nameEn: 'City Name',
     background: '#颜色代码',
@@ -259,10 +277,16 @@ class NewCityRenderer extends BaseCityRenderer {
 3. **在工厂中注册新渲染器**:
 ```javascript
 // CityRendererFactory.js
-this.renderers.set(9, new NewCityRenderer());
+this.renderers.set(18, new NewCityRenderer());
 ```
 
-4. **在 `index.html` 中引入新的渲染器文件**:
+4. **更新循环数量**:
+```javascript
+// CityRendererFactory.js - getRenderer方法
+const themeIndex = ((level - 1) % 18) + 1;
+```
+
+5. **在 `index.html` 中引入新的渲染器文件**:
 ```html
 <script src="js/render/cities/NewCityRenderer.js"></script>
 ```
