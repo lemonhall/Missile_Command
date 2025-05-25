@@ -380,11 +380,11 @@ class MissileCommand {
         // 更新渲染器时间
         this.renderer.update(this.lastTime);
         
-        // 清空画布
-        this.renderer.clearCanvas();
+        // 清空画布，传入当前关卡
+        this.renderer.clearCanvas(this.level);
         
-        // 绘制星空背景
-        this.renderer.drawStars();
+        // 绘制星空背景，传入当前关卡
+        this.renderer.drawStars(this.level);
         
         // 绘制地面
         this.renderer.drawGround(this.groundLevel);

@@ -12,40 +12,187 @@ class GameRenderer {
         this.time += deltaTime * 0.001; // 转换为秒
     }
     
-    clearCanvas() {
-        // 创建深空渐变背景
+    clearCanvas(level = 1) {
+        // 根据关卡选择不同的背景主题
+        const backgroundTheme = this.getBackgroundTheme(level);
+        
+        // 创建动态渐变背景
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.height);
-        gradient.addColorStop(0, '#0a0a2e');
-        gradient.addColorStop(0.3, '#16213e');
-        gradient.addColorStop(0.7, '#1a1a3a');
-        gradient.addColorStop(1, '#0f0f23');
+        gradient.addColorStop(0, backgroundTheme.sky.top);
+        gradient.addColorStop(0.3, backgroundTheme.sky.upper);
+        gradient.addColorStop(0.7, backgroundTheme.sky.lower);
+        gradient.addColorStop(1, backgroundTheme.sky.bottom);
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.width, this.height);
+        
+        // 添加关卡特效
+        this.drawBackgroundEffects(level, backgroundTheme);
     }
     
-    drawStars() {
-        // 多层星空效果
-        this.ctx.globalAlpha = 0.8;
+    getBackgroundTheme(level) {
+        if (level <= 3) {
+            // 早期关卡：平静的夜空
+            return {
+                sky: {
+                    top: '#0a0a2e',
+                    upper: '#16213e', 
+                    lower: '#1a1a3a',
+                    bottom: '#0f0f23'
+                },
+                stars: { color: '#ffffff', intensity: 0.8, count: 100 },
+                effects: 'peaceful'
+            };
+        } else if (level <= 6) {
+            // 中期关卡：警戒状态
+            return {
+                sky: {
+                    top: '#2e0a1a',
+                    upper: '#3e1626',
+                    lower: '#3a1a2a', 
+                    bottom: '#23070f'
+                },
+                stars: { color: '#ffcccc', intensity: 0.9, count: 120 },
+                effects: 'alert'
+            };
+        } else if (level <= 10) {
+            // 高难度关卡：战争状态
+            return {
+                sky: {
+                    top: '#2e1a0a',
+                    upper: '#3e2616',
+                    lower: '#3a2a1a',
+                    bottom: '#23150f'
+                },
+                stars: { color: '#ffaa66', intensity: 1.0, count: 140 },
+                effects: 'war'
+            };
+        } else {
+            // 极高关卡：末日状态
+            return {
+                sky: {
+                    top: '#3e0a2e',
+                    upper: '#4e1640',
+                    lower: '#4a1a3e',
+                    bottom: '#2e0723'
+                },
+                stars: { color: '#ff66aa', intensity: 1.2, count: 160 },
+                effects: 'apocalypse'
+            };
+        }
+    }
+    
+    drawBackgroundEffects(level, theme) {
+        const ctx = this.ctx;
+        
+        // 根据关卡添加不同的背景特效
+        switch(theme.effects) {
+            case 'alert':
+                // 警戒状态：微妙的红色脉动
+                const alertPulse = 0.02 + 0.03 * Math.sin(this.time * 1.5);
+                const alertGradient = ctx.createLinearGradient(0, 0, 0, this.height);
+                alertGradient.addColorStop(0, `rgba(255, 100, 100, ${alertPulse})`);
+                alertGradient.addColorStop(0.5, `rgba(255, 100, 100, ${alertPulse * 0.5})`);
+                alertGradient.addColorStop(1, 'rgba(255, 100, 100, 0)');
+                ctx.fillStyle = alertGradient;
+                ctx.fillRect(0, 0, this.width, this.height);
+                break;
+                
+            case 'war':
+                // 战争状态：橙色战火光芒
+                const warIntensity = 0.03 + 0.05 * Math.sin(this.time * 2 + Math.sin(this.time * 0.7));
+                const warGradient = ctx.createLinearGradient(0, 0, 0, this.height);
+                warGradient.addColorStop(0, `rgba(255, 150, 0, ${warIntensity})`);
+                warGradient.addColorStop(0.4, `rgba(255, 100, 0, ${warIntensity * 0.7})`);
+                warGradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+                ctx.fillStyle = warGradient;
+                ctx.fillRect(0, 0, this.width, this.height);
+                
+                // 漂浮的烟雾粒子
+                for (let i = 0; i < 3; i++) {
+                    const smokeX = (i * 300 + this.time * 8 + Math.sin(this.time * 0.5 + i) * 40) % (this.width + 80);
+                    const smokeY = (i * 120 + this.time * 2) % (this.height * 0.6);
+                    const smokeAlpha = 0.05 + 0.05 * Math.sin(this.time + i);
+                    
+                    // 创建烟雾渐变
+                    const smokeGradient = ctx.createRadialGradient(smokeX, smokeY, 0, smokeX, smokeY, 25);
+                    smokeGradient.addColorStop(0, `rgba(80, 40, 0, ${smokeAlpha})`);
+                    smokeGradient.addColorStop(1, 'rgba(80, 40, 0, 0)');
+                    ctx.fillStyle = smokeGradient;
+                    ctx.fillRect(smokeX - 25, smokeY - 25, 50, 50);
+                }
+                break;
+                
+            case 'apocalypse':
+                // 末日状态：强烈的紫红色脉动
+                const apocalypseIntensity = 0.05 + 0.08 * Math.sin(this.time * 3);
+                const apocalypseGradient = ctx.createLinearGradient(0, 0, 0, this.height);
+                apocalypseGradient.addColorStop(0, `rgba(255, 0, 100, ${apocalypseIntensity})`);
+                apocalypseGradient.addColorStop(0.3, `rgba(200, 0, 150, ${apocalypseIntensity * 0.8})`);
+                apocalypseGradient.addColorStop(0.7, `rgba(150, 0, 200, ${apocalypseIntensity * 0.4})`);
+                apocalypseGradient.addColorStop(1, 'rgba(100, 0, 150, 0)');
+                ctx.fillStyle = apocalypseGradient;
+                ctx.fillRect(0, 0, this.width, this.height);
+                
+                // 偶尔的闪电效果
+                if (Math.random() > 0.98) {
+                    ctx.strokeStyle = `rgba(255, 255, 255, 0.6)`;
+                    ctx.lineWidth = 2;
+                    ctx.shadowColor = '#ffffff';
+                    ctx.shadowBlur = 8;
+                    ctx.beginPath();
+                    const lightningX = Math.random() * this.width;
+                    const lightningY1 = Math.random() * this.height * 0.3;
+                    const lightningY2 = lightningY1 + Math.random() * this.height * 0.4;
+                    ctx.moveTo(lightningX, lightningY1);
+                    ctx.lineTo(lightningX + (Math.random() - 0.5) * 80, lightningY2);
+                    ctx.stroke();
+                    ctx.shadowBlur = 0;
+                }
+                
+                // 漂浮灰烬
+                for (let i = 0; i < 6; i++) {
+                    const ashX = (i * 180 + this.time * 12 + Math.sin(this.time * 0.3 + i) * 25) % (this.width + 40);
+                    const ashY = (i * 150 + this.time * 4) % (this.height * 0.8);
+                    const ashAlpha = 0.1 + 0.1 * Math.sin(this.time * 2 + i);
+                    
+                    // 创建灰烬粒子渐变
+                    const ashGradient = ctx.createRadialGradient(ashX, ashY, 0, ashX, ashY, 3);
+                    ashGradient.addColorStop(0, `rgba(150, 100, 150, ${ashAlpha})`);
+                    ashGradient.addColorStop(1, 'rgba(150, 100, 150, 0)');
+                    ctx.fillStyle = ashGradient;
+                    ctx.fillRect(ashX - 3, ashY - 3, 6, 6);
+                }
+                break;
+        }
+    }
+    
+    drawStars(level = 1) {
+        const theme = this.getBackgroundTheme(level);
+        const starConfig = theme.stars;
+        
+        // 多层星空效果，根据关卡调整
+        this.ctx.globalAlpha = starConfig.intensity * 0.8;
         
         // 远景星星
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < starConfig.count; i++) {
             const x = (i * 137 + Math.sin(this.time * 0.5 + i) * 0.5) % this.width;
             const y = (i * 197) % (this.height * 0.6);
             const twinkle = 0.5 + 0.5 * Math.sin(this.time * 2 + i);
             
-            this.ctx.fillStyle = `rgba(255, 255, 255, ${twinkle * 0.6})`;
+            this.ctx.fillStyle = `${starConfig.color}${Math.floor(twinkle * 255 * 0.6).toString(16).padStart(2, '0')}`;
             this.ctx.fillRect(x, y, 1, 1);
         }
         
-        // 近景大星星
-        for (let i = 0; i < 20; i++) {
+        // 近景大星星，高关卡有更多
+        const bigStarCount = level > 5 ? 30 : 20;
+        for (let i = 0; i < bigStarCount; i++) {
             const x = (i * 241 + Math.sin(this.time * 0.3 + i) * 1) % this.width;
             const y = (i * 317) % (this.height * 0.5);
             const twinkle = 0.3 + 0.7 * Math.sin(this.time * 1.5 + i * 2);
-            const size = 1 + twinkle;
+            const size = 1 + twinkle * (level > 10 ? 1.5 : 1);
             
-            this.ctx.fillStyle = `rgba(255, 255, 255, ${twinkle})`;
+            this.ctx.fillStyle = `${starConfig.color}${Math.floor(twinkle * 255).toString(16).padStart(2, '0')}`;
             this.ctx.fillRect(x, y, size, size);
         }
         
