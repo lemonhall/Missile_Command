@@ -77,5 +77,97 @@ const GameConfig = {
         MEDIUM: '32px Courier New',
         NORMAL: '24px Courier New',
         SMALL: '16px Courier New'
+    },
+    
+    // 城市主题配置
+    CITY_THEMES: {
+        1: { // 北京 - 古都新貌
+            name: '北京',
+            nameEn: 'Beijing',
+            background: '#1a1a2e',
+            skyGradient: ['#16213e', '#0f3460'],
+            groundColor: '#8b4513',
+            cityColor: '#b8860b',
+            cityLights: '#ffd700',
+            starColor: '#ffeaa7',
+            atmosphere: 'majestic'
+        },
+        2: { // 上海 - 东方明珠
+            name: '上海',
+            nameEn: 'Shanghai',
+            background: '#0f0f23',
+            skyGradient: ['#2d3436', '#636e72'],
+            groundColor: '#2d3436',
+            cityColor: '#00cec9',
+            cityLights: '#fd79a8',
+            starColor: '#81ecec',
+            atmosphere: 'modern'
+        },
+        3: { // 深圳 - 科技新城
+            name: '深圳',
+            nameEn: 'Shenzhen',
+            background: '#0c0c1e',
+            skyGradient: ['#2d3748', '#4a5568'],
+            groundColor: '#2d3748',
+            cityColor: '#4299e1',
+            cityLights: '#63b3ed',
+            starColor: '#bee3f8',
+            atmosphere: 'futuristic'
+        },
+        4: { // 纽约 - 不夜之城
+            name: '纽约',
+            nameEn: 'New York',
+            background: '#1a1a2e',
+            skyGradient: ['#16537e', '#2d3748'],
+            groundColor: '#4a5568',
+            cityColor: '#a0aec0',
+            cityLights: '#fbb6ce',
+            starColor: '#e2e8f0',
+            atmosphere: 'urban'
+        },
+        5: { // 东京 - 科技之都
+            name: '东京',
+            nameEn: 'Tokyo',
+            background: '#1a1a2e',
+            skyGradient: ['#553c9a', '#ee5a24'],
+            groundColor: '#2d3748',
+            cityColor: '#fd79a8',
+            cityLights: '#fdcb6e',
+            starColor: '#fab1a0',
+            atmosphere: 'neon'
+        },
+        6: { // 伦敦 - 雾都风情
+            name: '伦敦',
+            nameEn: 'London',
+            background: '#2d3436',
+            skyGradient: ['#636e72', '#b2bec3'],
+            groundColor: '#636e72',
+            cityColor: '#74b9ff',
+            cityLights: '#fd79a8',
+            starColor: '#ddd',
+            atmosphere: 'foggy'
+        },
+        7: { // 巴黎 - 浪漫之都
+            name: '巴黎',
+            nameEn: 'Paris',
+            background: '#2d3436',
+            skyGradient: ['#a29bfe', '#fd79a8'],
+            groundColor: '#636e72',
+            cityColor: '#fdcb6e',
+            cityLights: '#fd79a8',
+            starColor: '#f8c291',
+            atmosphere: 'romantic'
+        },
+        8: { // 悉尼 - 海港明珠
+            name: '悉尼',
+            nameEn: 'Sydney',
+            background: '#0984e3',
+            skyGradient: ['#74b9ff', '#0984e3'],
+            groundColor: '#fdcb6e',
+            cityColor: '#00b894',
+            cityLights: '#fd79a8',
+            starColor: '#ffeaa7',
+            atmosphere: 'oceanic'
+        }
     }
 }; 

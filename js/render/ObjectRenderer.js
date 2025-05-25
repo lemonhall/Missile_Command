@@ -7,34 +7,46 @@ class ObjectRenderer {
         this.height = canvas.height;
     }
     
-    drawCities(cities, time = 0) {
+    drawCities(cities, level = 1, time = 0) {
+        // 获取城市主题
+        const cityTheme = this.getCityTheme(level);
+        
         cities.forEach((city, index) => {
             if (city.alive) {
-                this.drawModernCity(city, index, time);
+                this.drawThemedCity(city, index, cityTheme, time);
             } else {
                 this.drawDestroyedCity(city);
             }
         });
     }
     
-    drawModernCity(city, index, time) {
+    getCityTheme(level) {
+        // 获取城市主题，与BackgroundRenderer保持一致
+        const cityThemes = GameConfig.CITY_THEMES;
+        const themeKeys = Object.keys(cityThemes);
+        const themeIndex = ((level - 1) % themeKeys.length) + 1;
+        
+        return cityThemes[themeIndex] || cityThemes[1];
+    }
+    
+    drawThemedCity(city, index, cityTheme, time) {
         const ctx = this.ctx;
         
         // 城市基础阴影
         ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
         ctx.fillRect(city.x + 3, city.y + 3, city.width, city.height);
         
-        // 主建筑渐变
+        // 主建筑渐变 - 使用城市主题颜色
         const buildingGradient = ctx.createLinearGradient(city.x, city.y, city.x, city.y + city.height);
-        buildingGradient.addColorStop(0, '#4fc3f7');
-        buildingGradient.addColorStop(0.5, '#29b6f6');
-        buildingGradient.addColorStop(1, '#0277bd');
+        buildingGradient.addColorStop(0, this.lightenColor(cityTheme.cityColor, 0.3));
+        buildingGradient.addColorStop(0.5, cityTheme.cityColor);
+        buildingGradient.addColorStop(1, this.darkenColor(cityTheme.cityColor, 0.3));
         
         ctx.fillStyle = buildingGradient;
         ctx.fillRect(city.x, city.y, city.width, city.height);
         
-        // 建筑边框发光
-        ctx.strokeStyle = '#00e5ff';
+        // 建筑边框发光 - 使用城市主题颜色
+        ctx.strokeStyle = cityTheme.cityLights;
         ctx.lineWidth = 2;
         ctx.globalAlpha = 0.8;
         ctx.strokeRect(city.x, city.y, city.width, city.height);
@@ -51,13 +63,14 @@ class ObjectRenderer {
                 ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
                 ctx.fillRect(wx, wy, 12, 6);
                 
-                // 窗户光效
+                // 窗户光效 - 使用城市主题颜色
                 if (Math.random() > 0.2) {
-                    ctx.fillStyle = `rgba(255, 255, 0, ${lightIntensity * 0.8})`;
+                    const lightColor = this.hexToRgb(cityTheme.cityLights);
+                    ctx.fillStyle = `rgba(${lightColor.r}, ${lightColor.g}, ${lightColor.b}, ${lightIntensity * 0.8})`;
                     ctx.fillRect(wx + 1, wy + 1, 10, 4);
                     
                     // 窗户发光效果
-                    ctx.shadowColor = '#ffff00';
+                    ctx.shadowColor = cityTheme.cityLights;
                     ctx.shadowBlur = 5;
                     ctx.fillRect(wx + 1, wy + 1, 10, 4);
                     ctx.shadowBlur = 0;
@@ -127,5 +140,41 @@ class ObjectRenderer {
             ctx.fillRect(launchPad.x - 2, launchPad.y - 25, 4, 2);
             ctx.shadowBlur = 0;
         }
+    }
+    
+    // 颜色处理辅助函数
+    darkenColor(color, factor) {
+        const hex = color.replace('#', '');
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        
+        const newR = Math.floor(r * (1 - factor));
+        const newG = Math.floor(g * (1 - factor));
+        const newB = Math.floor(b * (1 - factor));
+        
+        return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+    }
+    
+    lightenColor(color, factor) {
+        const hex = color.replace('#', '');
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        
+        const newR = Math.min(255, Math.floor(r + (255 - r) * factor));
+        const newG = Math.min(255, Math.floor(g + (255 - g) * factor));
+        const newB = Math.min(255, Math.floor(b + (255 - b) * factor));
+        
+        return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+    }
+    
+    hexToRgb(hex) {
+        const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+        return result ? {
+            r: parseInt(result[1], 16),
+            g: parseInt(result[2], 16),
+            b: parseInt(result[3], 16)
+        } : {r: 255, g: 255, b: 255};
     }
 } 

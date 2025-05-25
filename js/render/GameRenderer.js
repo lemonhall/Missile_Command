@@ -27,13 +27,13 @@ class GameRenderer {
         this.backgroundRenderer.drawStars(level, this.time);
     }
     
-    drawGround(groundLevel) {
-        this.backgroundRenderer.drawGround(groundLevel);
+    drawGround(groundLevel, level = 1) {
+        this.backgroundRenderer.drawGround(groundLevel, level);
     }
 
     
-    drawCities(cities) {
-        this.objectRenderer.drawCities(cities, this.time);
+    drawCities(cities, level = 1) {
+        this.objectRenderer.drawCities(cities, level, this.time);
     }
     
     drawLaunchPad(launchPad) {
@@ -66,5 +66,9 @@ class GameRenderer {
     
     drawPauseScreen() {
         this.uiRenderer.drawPauseScreen();
+    }
+    
+    drawCityName(level) {
+        this.uiRenderer.drawCityName(level);
     }
 } 

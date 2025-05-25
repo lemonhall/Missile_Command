@@ -79,10 +79,10 @@ class GameCore {
         this.renderer.drawStars(this.level);
         
         // 绘制地面
-        this.renderer.drawGround(this.groundLevel);
+        this.renderer.drawGround(this.groundLevel, this.level);
         
         // 绘制城市
-        this.renderer.drawCities(this.cities);
+        this.renderer.drawCities(this.cities, this.level);
         
         // 绘制发射台
         this.renderer.drawLaunchPad(this.launchPad);
@@ -111,6 +111,9 @@ class GameCore {
                 this.enemyMissilesToSpawn, 
                 this.enemyMissiles.length
             );
+            
+            // 绘制城市名称
+            this.renderer.drawCityName(this.level);
         }
         
         // 绘制暂停信息

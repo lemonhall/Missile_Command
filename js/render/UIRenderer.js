@@ -61,4 +61,34 @@ class UIRenderer {
         ctx.fillText('游戏暂停', this.width / 2, this.height / 2);
         ctx.shadowBlur = 0;
     }
+    
+    drawCityName(level) {
+        const ctx = this.ctx;
+        const cityTheme = this.getCityTheme(level);
+        
+        // 城市名称显示
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+        ctx.fillRect(this.width - 150, 5, 140, 50);
+        
+        ctx.fillStyle = '#ffffff';
+        ctx.font = GameConfig.FONTS.NORMAL;
+        ctx.textAlign = 'center';
+        ctx.shadowColor = cityTheme.cityLights;
+        ctx.shadowBlur = 10;
+        ctx.fillText(cityTheme.name, this.width - 80, 25);
+        
+        ctx.font = GameConfig.FONTS.SMALL;
+        ctx.fillStyle = '#cccccc';
+        ctx.shadowBlur = 5;
+        ctx.fillText(cityTheme.nameEn, this.width - 80, 45);
+        ctx.shadowBlur = 0;
+    }
+    
+    getCityTheme(level) {
+        const cityThemes = GameConfig.CITY_THEMES;
+        const themeKeys = Object.keys(cityThemes);
+        const themeIndex = ((level - 1) % themeKeys.length) + 1;
+        
+        return cityThemes[themeIndex] || cityThemes[1];
+    }
 } 

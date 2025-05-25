@@ -8,80 +8,35 @@ class BackgroundRenderer {
     }
     
     clearCanvas(level = 1, time = 0) {
-        // 根据关卡选择不同的背景主题
-        const backgroundTheme = this.getBackgroundTheme(level);
+        // 获取城市主题配置
+        const cityTheme = this.getCityTheme(level);
         
-        // 创建动态渐变背景
+        // 创建城市主题的天空渐变
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.height);
-        gradient.addColorStop(0, backgroundTheme.sky.top);
-        gradient.addColorStop(0.3, backgroundTheme.sky.upper);
-        gradient.addColorStop(0.7, backgroundTheme.sky.lower);
-        gradient.addColorStop(1, backgroundTheme.sky.bottom);
+        gradient.addColorStop(0, cityTheme.skyGradient[0]);
+        gradient.addColorStop(1, cityTheme.skyGradient[1]);
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, 0, this.width, this.height);
         
-        // 添加关卡特效
-        this.drawBackgroundEffects(level, backgroundTheme, time);
+        // 添加城市氛围特效
+        this.drawCityAtmosphere(level, cityTheme, time);
     }
     
-    getBackgroundTheme(level) {
-        if (level <= 3) {
-            // 早期关卡：平静的夜空
-            return {
-                sky: {
-                    top: '#0a0a2e',
-                    upper: '#16213e', 
-                    lower: '#1a1a3a',
-                    bottom: '#0f0f23'
-                },
-                stars: { color: '#ffffff', intensity: 0.8, count: 100 },
-                effects: 'peaceful'
-            };
-        } else if (level <= 6) {
-            // 中期关卡：警戒状态
-            return {
-                sky: {
-                    top: '#2e0a1a',
-                    upper: '#3e1626',
-                    lower: '#3a1a2a', 
-                    bottom: '#23070f'
-                },
-                stars: { color: '#ffcccc', intensity: 0.9, count: 120 },
-                effects: 'alert'
-            };
-        } else if (level <= 10) {
-            // 高难度关卡：战争状态
-            return {
-                sky: {
-                    top: '#2e1a0a',
-                    upper: '#3e2616',
-                    lower: '#3a2a1a',
-                    bottom: '#23150f'
-                },
-                stars: { color: '#ffaa66', intensity: 1.0, count: 140 },
-                effects: 'war'
-            };
-        } else {
-            // 极高关卡：末日状态
-            return {
-                sky: {
-                    top: '#3e0a2e',
-                    upper: '#4e1640',
-                    lower: '#4a1a3e',
-                    bottom: '#2e0723'
-                },
-                stars: { color: '#ff66aa', intensity: 1.2, count: 160 },
-                effects: 'apocalypse'
-            };
-        }
+    getCityTheme(level) {
+        // 获取城市主题，如果超出范围则循环使用
+        const cityThemes = GameConfig.CITY_THEMES;
+        const themeKeys = Object.keys(cityThemes);
+        const themeIndex = ((level - 1) % themeKeys.length) + 1;
+        
+        return cityThemes[themeIndex] || cityThemes[1]; // 默认返回北京主题
     }
     
-    drawBackgroundEffects(level, theme, time) {
+    drawCityAtmosphere(level, cityTheme, time) {
         const ctx = this.ctx;
         
-        // 根据关卡添加不同的背景特效（降低强度，减少闪烁）
-        switch(theme.effects) {
+        // 根据城市氛围添加特效
+        switch(cityTheme.atmosphere) {
             case 'alert':
                 // 警戒状态：非常微妙的红色氛围（减少脉动）
                 const alertIntensity = 0.01 + 0.005 * Math.sin(time * 0.5); // 降低频率和强度
@@ -160,43 +115,60 @@ class BackgroundRenderer {
     }
     
     drawStars(level = 1, time = 0) {
-        const theme = this.getBackgroundTheme(level);
-        const starConfig = theme.stars;
+        const cityTheme = this.getCityTheme(level);
         
-        // 多层星空效果，根据关卡调整
-        this.ctx.globalAlpha = starConfig.intensity * 0.8;
+        // 多层星空效果，根据城市主题调整
+        this.ctx.globalAlpha = 0.6;
+        
+        // 根据城市氛围调整星星数量
+        const starCount = this.getStarCount(cityTheme.atmosphere);
         
         // 远景星星
-        for (let i = 0; i < starConfig.count; i++) {
+        for (let i = 0; i < starCount.small; i++) {
             const x = (i * 137 + Math.sin(time * 0.5 + i) * 0.5) % this.width;
             const y = (i * 197) % (this.height * 0.6);
             const twinkle = 0.5 + 0.5 * Math.sin(time * 2 + i);
             
-            this.ctx.fillStyle = `${starConfig.color}${Math.floor(twinkle * 255 * 0.6).toString(16).padStart(2, '0')}`;
+            this.ctx.fillStyle = `${cityTheme.starColor}${Math.floor(twinkle * 255 * 0.6).toString(16).padStart(2, '0')}`;
             this.ctx.fillRect(x, y, 1, 1);
         }
         
-        // 近景大星星，高关卡有更多
-        const bigStarCount = level > 5 ? 30 : 20;
-        for (let i = 0; i < bigStarCount; i++) {
+        // 近景大星星
+        for (let i = 0; i < starCount.large; i++) {
             const x = (i * 241 + Math.sin(time * 0.3 + i) * 1) % this.width;
             const y = (i * 317) % (this.height * 0.5);
             const twinkle = 0.3 + 0.7 * Math.sin(time * 1.5 + i * 2);
-            const size = 1 + twinkle * (level > 10 ? 1.5 : 1);
+            const size = 1 + twinkle * 1;
             
-            this.ctx.fillStyle = `${starConfig.color}${Math.floor(twinkle * 255).toString(16).padStart(2, '0')}`;
+            this.ctx.fillStyle = `${cityTheme.starColor}${Math.floor(twinkle * 255).toString(16).padStart(2, '0')}`;
             this.ctx.fillRect(x, y, size, size);
         }
         
         this.ctx.globalAlpha = 1;
     }
     
-    drawGround(groundLevel) {
-        // 创建地面渐变
+    getStarCount(atmosphere) {
+        switch(atmosphere) {
+            case 'oceanic': return { small: 120, large: 25 };  // 海边城市，星星更多
+            case 'futuristic': return { small: 80, large: 15 }; // 科技城市，星星较少
+            case 'foggy': return { small: 60, large: 10 };     // 雾都，星星很少
+            case 'urban': return { small: 70, large: 12 };     // 都市，光污染
+            case 'neon': return { small: 90, large: 18 };      // 霓虹城市
+            case 'romantic': return { small: 110, large: 22 }; // 浪漫城市
+            case 'majestic': return { small: 100, large: 20 }; // 古都
+            case 'modern': return { small: 85, large: 16 };    // 现代城市
+            default: return { small: 100, large: 20 };
+        }
+    }
+    
+    drawGround(groundLevel, level = 1) {
+        const cityTheme = this.getCityTheme(level);
+        
+        // 创建城市主题的地面渐变
         const gradient = this.ctx.createLinearGradient(0, groundLevel, 0, this.height);
-        gradient.addColorStop(0, '#2d4a3e');
-        gradient.addColorStop(0.3, '#1e3329');
-        gradient.addColorStop(1, '#0f1a14');
+        gradient.addColorStop(0, cityTheme.groundColor);
+        gradient.addColorStop(0.3, this.darkenColor(cityTheme.groundColor, 0.3));
+        gradient.addColorStop(1, this.darkenColor(cityTheme.groundColor, 0.6));
         
         this.ctx.fillStyle = gradient;
         this.ctx.fillRect(0, groundLevel, this.width, this.height - groundLevel);
@@ -210,5 +182,20 @@ class BackgroundRenderer {
             this.ctx.lineTo(i, this.height);
         }
         this.ctx.stroke();
+    }
+    
+    // 辅助函数：使颜色变暗
+    darkenColor(color, factor) {
+        // 简单的颜色变暗函数，适用于十六进制颜色
+        const hex = color.replace('#', '');
+        const r = parseInt(hex.substr(0, 2), 16);
+        const g = parseInt(hex.substr(2, 2), 16);
+        const b = parseInt(hex.substr(4, 2), 16);
+        
+        const newR = Math.floor(r * (1 - factor));
+        const newG = Math.floor(g * (1 - factor));
+        const newB = Math.floor(b * (1 - factor));
+        
+        return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
     }
 } 
