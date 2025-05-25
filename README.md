@@ -120,7 +120,13 @@ Missile_Command/
     ├── AudioManager.js # 音效和音乐管理系统
     ├── GameConfig.js   # 游戏配置和常量
     ├── GameObject.js   # 游戏对象类定义
-    ├── GameRenderer.js # 渲染功能模块
+    ├── render/         # 模块化渲染系统
+    │   ├── BackgroundRenderer.js  # 背景和星空渲染
+    │   ├── ObjectRenderer.js      # 城市和发射台渲染
+    │   ├── MissileRenderer.js     # 导弹渲染
+    │   ├── EffectRenderer.js      # 爆炸和粒子特效
+    │   ├── UIRenderer.js          # 用户界面渲染
+    │   └── GameRenderer.js        # 主渲染协调器
     ├── MissileCommand.js # 主要游戏逻辑
     └── main.js         # 游戏初始化
 ```
@@ -130,7 +136,13 @@ Missile_Command/
 - **AudioManager.js**: 完整的音效系统，包括音效生成和背景音乐播放
 - **GameConfig.js**: 包含所有游戏参数、颜色、字体等配置
 - **GameObject.js**: 定义导弹、爆炸、粒子、城市等游戏对象类
-- **GameRenderer.js**: 负责所有绘制功能，包括背景、对象、UI等
+- **渲染模块**: 模块化的渲染系统，提供高质量的视觉效果
+  - `BackgroundRenderer.js`: 多层背景主题和星空效果
+  - `ObjectRenderer.js`: 现代化城市建筑和发射台
+  - `MissileRenderer.js`: 发光轨迹和火箭造型导弹
+  - `EffectRenderer.js`: 层次丰富的爆炸和粒子特效
+  - `UIRenderer.js`: 发光文字和界面元素
+  - `GameRenderer.js`: 统一的渲染协调器
 - **MissileCommand.js**: 核心游戏逻辑，包括更新、碰撞检测、关卡管理
 - **main.js**: 游戏初始化入口和UI控制
 
