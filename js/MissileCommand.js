@@ -25,7 +25,10 @@ class MissileCommand {
         this.groundLevel = this.height - GameConfig.GROUND_LEVEL_OFFSET;
         this.launchPad = new LaunchPad(this.width / 2, this.groundLevel);
         this.citiesRemaining = GameConfig.CITY_COUNT;
-        this.enemyMissilesToSpawn = GameConfig.ENEMY_MISSILE_BASE_COUNT;
+        this.enemyMissilesToSpawn = Math.min(
+            GameConfig.ENEMY_MISSILE_BASE_COUNT + this.level * GameConfig.ENEMY_MISSILE_COUNT_INCREMENT,
+            GameConfig.ENEMY_MISSILE_MAX_COUNT
+        );
         this.enemyMissilesSpawned = 0;
         
         // 控制变量
@@ -53,7 +56,10 @@ class MissileCommand {
         }
         
         this.citiesRemaining = GameConfig.CITY_COUNT;
-        this.enemyMissilesToSpawn = GameConfig.ENEMY_MISSILE_BASE_COUNT + this.level * GameConfig.ENEMY_MISSILE_COUNT_INCREMENT;
+        this.enemyMissilesToSpawn = Math.min(
+            GameConfig.ENEMY_MISSILE_BASE_COUNT + this.level * GameConfig.ENEMY_MISSILE_COUNT_INCREMENT,
+            GameConfig.ENEMY_MISSILE_MAX_COUNT
+        );
         this.enemyMissilesSpawned = 0;
         this.levelCompleting = false; // 重置关卡完成标志
         this.updateUI();
@@ -202,7 +208,11 @@ class MissileCommand {
         
         const targetX = target.x + (target.width || 0) / 2;
         const targetY = target.y || this.groundLevel;
-        const speed = GameConfig.ENEMY_MISSILE_BASE_SPEED + this.level * GameConfig.ENEMY_MISSILE_SPEED_INCREMENT;
+        // 应用导弹速度上限
+        const speed = Math.min(
+            GameConfig.ENEMY_MISSILE_BASE_SPEED + this.level * GameConfig.ENEMY_MISSILE_SPEED_INCREMENT,
+            GameConfig.ENEMY_MISSILE_MAX_SPEED
+        );
         
         const missile = new Missile(startX, 0, targetX, targetY, speed);
         this.enemyMissiles.push(missile);
@@ -335,7 +345,10 @@ class MissileCommand {
         }
         
         // 重新初始化关卡
-        this.enemyMissilesToSpawn = GameConfig.ENEMY_MISSILE_BASE_COUNT + this.level * GameConfig.ENEMY_MISSILE_COUNT_INCREMENT;
+        this.enemyMissilesToSpawn = Math.min(
+            GameConfig.ENEMY_MISSILE_BASE_COUNT + this.level * GameConfig.ENEMY_MISSILE_COUNT_INCREMENT,
+            GameConfig.ENEMY_MISSILE_MAX_COUNT
+        );
         this.enemyMissilesSpawned = 0;
         this.levelCompleting = false; // 重置关卡完成标志，准备下一关
         this.updateUI();

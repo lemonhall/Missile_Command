@@ -85,83 +85,80 @@ class GameRenderer {
     drawBackgroundEffects(level, theme) {
         const ctx = this.ctx;
         
-        // 根据关卡添加不同的背景特效
+        // 根据关卡添加不同的背景特效（降低强度，减少闪烁）
         switch(theme.effects) {
             case 'alert':
-                // 警戒状态：微妙的红色脉动
-                const alertPulse = 0.02 + 0.03 * Math.sin(this.time * 1.5);
+                // 警戒状态：非常微妙的红色氛围（减少脉动）
+                const alertIntensity = 0.01 + 0.005 * Math.sin(this.time * 0.5); // 降低频率和强度
                 const alertGradient = ctx.createLinearGradient(0, 0, 0, this.height);
-                alertGradient.addColorStop(0, `rgba(255, 100, 100, ${alertPulse})`);
-                alertGradient.addColorStop(0.5, `rgba(255, 100, 100, ${alertPulse * 0.5})`);
-                alertGradient.addColorStop(1, 'rgba(255, 100, 100, 0)');
+                alertGradient.addColorStop(0, `rgba(255, 120, 120, ${alertIntensity})`);
+                alertGradient.addColorStop(0.6, `rgba(255, 140, 140, ${alertIntensity * 0.7})`);
+                alertGradient.addColorStop(1, 'rgba(255, 160, 160, 0)');
                 ctx.fillStyle = alertGradient;
                 ctx.fillRect(0, 0, this.width, this.height);
                 break;
                 
             case 'war':
-                // 战争状态：橙色战火光芒
-                const warIntensity = 0.03 + 0.05 * Math.sin(this.time * 2 + Math.sin(this.time * 0.7));
+                // 战争状态：温和的橙色氛围（减少强度）
+                const warIntensity = 0.02 + 0.01 * Math.sin(this.time * 0.8); // 降低频率和强度
                 const warGradient = ctx.createLinearGradient(0, 0, 0, this.height);
-                warGradient.addColorStop(0, `rgba(255, 150, 0, ${warIntensity})`);
-                warGradient.addColorStop(0.4, `rgba(255, 100, 0, ${warIntensity * 0.7})`);
-                warGradient.addColorStop(1, 'rgba(255, 50, 0, 0)');
+                warGradient.addColorStop(0, `rgba(255, 180, 100, ${warIntensity})`);
+                warGradient.addColorStop(0.5, `rgba(255, 160, 80, ${warIntensity * 0.8})`);
+                warGradient.addColorStop(1, 'rgba(255, 140, 60, 0)');
                 ctx.fillStyle = warGradient;
                 ctx.fillRect(0, 0, this.width, this.height);
                 
-                // 漂浮的烟雾粒子
-                for (let i = 0; i < 3; i++) {
-                    const smokeX = (i * 300 + this.time * 8 + Math.sin(this.time * 0.5 + i) * 40) % (this.width + 80);
-                    const smokeY = (i * 120 + this.time * 2) % (this.height * 0.6);
-                    const smokeAlpha = 0.05 + 0.05 * Math.sin(this.time + i);
+                // 更柔和的烟雾粒子（减少数量）
+                for (let i = 0; i < 2; i++) {
+                    const smokeX = (i * 400 + this.time * 5 + Math.sin(this.time * 0.3 + i) * 30) % (this.width + 60);
+                    const smokeY = (i * 200 + this.time * 1.5) % (this.height * 0.7);
+                    const smokeAlpha = 0.03 + 0.02 * Math.sin(this.time * 0.5 + i); // 降低透明度
                     
-                    // 创建烟雾渐变
-                    const smokeGradient = ctx.createRadialGradient(smokeX, smokeY, 0, smokeX, smokeY, 25);
-                    smokeGradient.addColorStop(0, `rgba(80, 40, 0, ${smokeAlpha})`);
-                    smokeGradient.addColorStop(1, 'rgba(80, 40, 0, 0)');
+                    // 创建更柔和的烟雾渐变
+                    const smokeGradient = ctx.createRadialGradient(smokeX, smokeY, 0, smokeX, smokeY, 30);
+                    smokeGradient.addColorStop(0, `rgba(100, 60, 30, ${smokeAlpha})`);
+                    smokeGradient.addColorStop(1, 'rgba(100, 60, 30, 0)');
                     ctx.fillStyle = smokeGradient;
-                    ctx.fillRect(smokeX - 25, smokeY - 25, 50, 50);
+                    ctx.fillRect(smokeX - 30, smokeY - 30, 60, 60);
                 }
                 break;
                 
             case 'apocalypse':
-                // 末日状态：强烈的紫红色脉动
-                const apocalypseIntensity = 0.05 + 0.08 * Math.sin(this.time * 3);
+                // 末日状态：柔和的紫色氛围（大幅减少强度）
+                const apocalypseIntensity = 0.025 + 0.015 * Math.sin(this.time * 0.6); // 降低频率和强度
                 const apocalypseGradient = ctx.createLinearGradient(0, 0, 0, this.height);
-                apocalypseGradient.addColorStop(0, `rgba(255, 0, 100, ${apocalypseIntensity})`);
-                apocalypseGradient.addColorStop(0.3, `rgba(200, 0, 150, ${apocalypseIntensity * 0.8})`);
-                apocalypseGradient.addColorStop(0.7, `rgba(150, 0, 200, ${apocalypseIntensity * 0.4})`);
-                apocalypseGradient.addColorStop(1, 'rgba(100, 0, 150, 0)');
+                apocalypseGradient.addColorStop(0, `rgba(200, 100, 180, ${apocalypseIntensity})`);
+                apocalypseGradient.addColorStop(0.4, `rgba(180, 80, 160, ${apocalypseIntensity * 0.8})`);
+                apocalypseGradient.addColorStop(0.8, `rgba(160, 60, 140, ${apocalypseIntensity * 0.4})`);
+                apocalypseGradient.addColorStop(1, 'rgba(140, 40, 120, 0)');
                 ctx.fillStyle = apocalypseGradient;
                 ctx.fillRect(0, 0, this.width, this.height);
                 
-                // 偶尔的闪电效果
-                if (Math.random() > 0.98) {
-                    ctx.strokeStyle = `rgba(255, 255, 255, 0.6)`;
-                    ctx.lineWidth = 2;
-                    ctx.shadowColor = '#ffffff';
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    const lightningX = Math.random() * this.width;
-                    const lightningY1 = Math.random() * this.height * 0.3;
-                    const lightningY2 = lightningY1 + Math.random() * this.height * 0.4;
-                    ctx.moveTo(lightningX, lightningY1);
-                    ctx.lineTo(lightningX + (Math.random() - 0.5) * 80, lightningY2);
-                    ctx.stroke();
-                    ctx.shadowBlur = 0;
+                // 移除闪电效果，改为更柔和的能量波动
+                const energyWave = 0.02 + 0.01 * Math.sin(this.time * 0.4);
+                if (energyWave > 0.025) {
+                    const waveGradient = ctx.createRadialGradient(
+                        this.width * 0.5, this.height * 0.3, 0,
+                        this.width * 0.5, this.height * 0.3, this.width * 0.3
+                    );
+                    waveGradient.addColorStop(0, `rgba(255, 255, 255, ${(energyWave - 0.025) * 0.1})`);
+                    waveGradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+                    ctx.fillStyle = waveGradient;
+                    ctx.fillRect(0, 0, this.width, this.height);
                 }
                 
-                // 漂浮灰烬
-                for (let i = 0; i < 6; i++) {
-                    const ashX = (i * 180 + this.time * 12 + Math.sin(this.time * 0.3 + i) * 25) % (this.width + 40);
-                    const ashY = (i * 150 + this.time * 4) % (this.height * 0.8);
-                    const ashAlpha = 0.1 + 0.1 * Math.sin(this.time * 2 + i);
+                // 更少更柔和的漂浮粒子
+                for (let i = 0; i < 4; i++) {
+                    const particleX = (i * 200 + this.time * 8 + Math.sin(this.time * 0.2 + i) * 20) % (this.width + 30);
+                    const particleY = (i * 180 + this.time * 3) % (this.height * 0.9);
+                    const particleAlpha = 0.04 + 0.03 * Math.sin(this.time * 0.8 + i); // 降低透明度
                     
-                    // 创建灰烬粒子渐变
-                    const ashGradient = ctx.createRadialGradient(ashX, ashY, 0, ashX, ashY, 3);
-                    ashGradient.addColorStop(0, `rgba(150, 100, 150, ${ashAlpha})`);
-                    ashGradient.addColorStop(1, 'rgba(150, 100, 150, 0)');
-                    ctx.fillStyle = ashGradient;
-                    ctx.fillRect(ashX - 3, ashY - 3, 6, 6);
+                    // 创建更柔和的粒子渐变
+                    const particleGradient = ctx.createRadialGradient(particleX, particleY, 0, particleX, particleY, 4);
+                    particleGradient.addColorStop(0, `rgba(180, 140, 200, ${particleAlpha})`);
+                    particleGradient.addColorStop(1, 'rgba(180, 140, 200, 0)');
+                    ctx.fillStyle = particleGradient;
+                    ctx.fillRect(particleX - 4, particleY - 4, 8, 8);
                 }
                 break;
         }
